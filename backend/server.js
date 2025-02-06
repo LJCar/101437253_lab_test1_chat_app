@@ -6,7 +6,7 @@ const userRoutes = require('./src/routes/userRoutes');
 require('dotenv').config();
 console.log("MONGO_URI:", process.env.MONGO_URI);
 const path = require('path');
-
+const GroupMessage = require('./src/models/GroupMessage');
 
 const app = express();
 
@@ -34,9 +34,30 @@ const io = new Server(server);
 io.on("connection", (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
-    socket.on("message", (data) => {
-        console.log(`Message received: ${data}`);
-        io.emit("message", data);
+    socket.on("joinRoom", ({ username, room }) => {
+        socket.join(room);
+        console.log(`${username} joined room: ${room}`);
+
+        io.to(room).emit("message", { username: "Server:", message: `${username} joined the chat` });
+    });
+
+    socket.on("leaveRoom", ({ username, room }) => {
+        socket.leave(room);
+        console.log(`${username} left room: ${room}`);
+        io.to(room).emit("message", { username: "Server:", message: `${username} left the chat` });
+    });
+
+    socket.on("chatMessage", async ({ username, room, message }) => {
+        console.log(`Message from ${username} in ${room}: ${message}`);
+
+        const newMessage = new GroupMessage({ from_user: username, room, message });
+
+        try {
+            await newMessage.save();
+            io.to(room).emit("message", { username, message });
+        } catch (error) {
+            console.error("Error saving message:", error);
+        }
     });
 
     socket.on("disconnect", () => {

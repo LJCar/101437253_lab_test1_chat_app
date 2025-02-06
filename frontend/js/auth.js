@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await response.json();
                 if (response.ok) {
                     alert("Login successful!");
-                    localStorage.setItem("user", JSON.stringify(data));
+                    localStorage.setItem("user", JSON.stringify({username}));
                     window.location.href = "chat.html";
                 } else {
                     alert(data.message || "Login failed!");

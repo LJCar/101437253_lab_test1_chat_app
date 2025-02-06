@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script defer src="../js/auth.js"></script>
+    <script defer src="../js/chat.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+<h2>Chat Rooms</h2>
+<p id="username"></p>
+
+<label for="room-select">Choose a Room:</label>
+<select id="room-select">
+    <option value="devops">DevOps</option>
+    <option value="cloud">Cloud Computing</option>
+    <option value="covid19">COVID-19</option>
+    <option value="sports">Sports</option>
+    <option value="nodejs">NodeJS</option>
+</select>
+<button id="join-room-btn">Join Room</button>
+<button id="leave-room-btn" disabled>Leave Room</button>
+
+<div id="chat-box">
+    <ul id="messages"></ul>
+</div>
+
+<input type="text" id="message-input" placeholder="Message here...">
+<button id="send-btn">Send</button>
+
+<button id="logout-btn">Logout</button>
+
+</body>
+</html>
